@@ -11,8 +11,17 @@ LoadDB();
 
 // API endpoint to get all of the available blogs
 export async function GET(request) {
-  const blogs = await BlogModel.find({});
-  return NextResponse.json({blogs});
+  const blogId = request.nextUrl.searchParams.get("id");
+
+  if (blogId) {
+    // For indivisual blog
+    const blog = await BlogModel.findById(blogId);
+    return NextResponse.json(blog);
+  } else {
+    // For all
+    const blogs = await BlogModel.find({});
+    return NextResponse.json({ blogs });
+  }
 }
 
 // API endpoint for uploading blogs
@@ -28,7 +37,7 @@ export async function POST(request) {
   // Save image in the public folder
   await writeFile(path, buffer);
   const imgUrl = `/${timestamp}_${image.name}`;
-    
+
   // Save other data in the database
   const blogData = {
     title: `${formData.get("title")}`,
@@ -36,8 +45,8 @@ export async function POST(request) {
     category: `${formData.get("category")}`,
     author: `${formData.get("author")}`,
     image: `${imgUrl}`,
-    authorImg: `${formData.get("authorImg")}`
-  }
+    authorImg: `${formData.get("authorImg")}`,
+  };
 
   await BlogModel.create(blogData);
   console.log("Blog saved!");

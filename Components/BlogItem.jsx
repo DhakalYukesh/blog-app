@@ -5,15 +5,11 @@ import React from "react";
 
 export const BlogItem = ({ title, description, category, image, id }) => {
   return (
-    <div className="max-w-[330px] sm:max-w-[300px] bg-white border border-black hover:shadow-[-7px_7px_0px_#000000]">
+    <div className="max-w-[330px] sm:max-w-[300px] overflow-hidden bg-white border border-black hover:shadow-[-7px_7px_0px_#000000]">
       <Link href={`/blogs/${id}`}>
-        <Image
-          src={image}
-          alt=""
-          width={400}
-          height={400}
-          className="border-b border-black"
-        />
+        <div className="relative w-[300px] h-80 overflow-hidden bg-white border-b border-black">
+          <Image src={image} alt="" layout="fill" objectFit="contain" />
+        </div>
       </Link>
       <p className="ml-5 mt-5 px-1 inline-block bg-black text-white text-sm">
         {category}
@@ -23,9 +19,12 @@ export const BlogItem = ({ title, description, category, image, id }) => {
           {title}
         </h5>
         <p className="mb-3 text-sm tracking-tight text-gray-700">
-          {description}
+          {description.slice(0, 150)}...
         </p>
-        <Link href={`/blogs/${id}`} className="inline-flex items-center py-2 font-semibold text-center">
+        <Link
+          href={`/blogs/${id}`}
+          className="inline-flex items-center py-2 font-semibold text-center"
+        >
           Read more{" "}
           <Image src={assets.arrow} className="ml-2" alt="" width={12} />
         </Link>
